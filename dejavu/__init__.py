@@ -93,24 +93,20 @@ class Dejavu(object):
         pool.close()
         pool.join()
 
-    def fingerprint_file(self, filepath, song_name=None):
-        songname = decoder.path_to_songname(filepath)
-        song_hash = decoder.unique_hash(filepath)
-        song_name = song_name or songname
+    def fingerprint_file(self, archivo_mp3, archivo_huellas, id_version):
+        id_version = id_version
         # don't refingerprint already fingerprinted files
-        if song_hash in self.songhashes_set:
-            print "%s already fingerprinted, continuing..." % song_name
-        else:
-            song_name, hashes, file_hash = _fingerprint_worker(
-                filepath,
-                self.limit,
-                song_name=song_name
-            )
-            sid = self.db.insert_song(song_name, file_hash)
-
-            self.db.insert_hashes(sid, hashes)
-            self.db.set_song_fingerprinted(sid)
-            self.get_fingerprinted_songs()
+        id_version, hashes, file_hash = _fingerprint_worker(
+            archivo_mp3,
+            self.limit,
+            song_name=id_version
+        )
+        with open(archivo_huellas, "rb") as txt:
+            for huella in hashes:
+                txt.write(str(huella[0]) + "," + str(huella[1]) + "\n")
+                
+        print "huellas generadas en " + archivo_huellas
+        
 
     def find_matches(self, samples, Fs=fingerprint.DEFAULT_FS):
         hashes = fingerprint.fingerprint(samples, Fs=Fs)
