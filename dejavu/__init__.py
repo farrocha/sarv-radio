@@ -101,7 +101,7 @@ class Dejavu(object):
             self.limit,
             song_name=id_version
         )
-        with open(archivo_huellas, "rb") as txt:
+        with open(archivo_huellas, "wb") as txt:
             for huella in hashes:
                 txt.write(str(huella[0]) + "," + str(huella[1]) + "\n")
                 
