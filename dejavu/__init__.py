@@ -16,23 +16,23 @@ class Dejavu(object):
     OFFSET = 'offset'
     OFFSET_SECS = 'offset_seconds'
 
-    def __init__(self, config):
+    def __init__(self):
         super(Dejavu, self).__init__()
 
-        self.config = config
+        #self.config = config
 
         # initialize db
-        db_cls = get_database(config.get("database_type", None))
+        #db_cls = get_database(config.get("database_type", None))
 
-        self.db = db_cls(**config.get("database", {}))
-        self.db.setup()
+        #self.db = db_cls(**config.get("database", {}))
+        #self.db.setup()
 
         # if we should limit seconds fingerprinted,
         # None|-1 means use entire track
-        self.limit = self.config.get("fingerprint_limit", None)
-        if self.limit == -1:  # for JSON compatibility
-            self.limit = None
-        self.get_fingerprinted_songs()
+        self.limit = None
+        #if self.limit == -1:  # for JSON compatibility
+        #    self.limit = None
+        #self.get_fingerprinted_songs()
 
     def get_fingerprinted_songs(self):
         # get songs previously indexed
@@ -106,7 +106,7 @@ class Dejavu(object):
                 txt.write(str(huella[0]) + "," + str(huella[1]) + "\n")
                 
         print "huellas generadas en " + archivo_huellas
-        
+
 
     def find_matches(self, samples, Fs=fingerprint.DEFAULT_FS):
         hashes = fingerprint.fingerprint(samples, Fs=Fs)
